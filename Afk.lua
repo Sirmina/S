@@ -1,14 +1,23 @@
-local VirtualUser = game:GetService("VirtualUser")
-local player = game.Players.LocalPlayer
+-- Anti AFK (Movement-based) WORKING
+-- Cocok untuk Demon Soul Simulator
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Anti AFK",
-    Text = "Anti AFK AKTIF",
-    Duration = 5
-})
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
-player.Idled:Connect(function()
-    VirtualUser:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-    task.wait(1)
-    VirtualUser:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+local player = Players.LocalPlayer
+
+local function getHRP()
+    local char = player.Character or player.CharacterAdded:Wait()
+    return char:WaitForChild("HumanoidRootPart")
+end
+
+task.spawn(function()
+    while true do
+        task.wait(60) -- setiap 60 detik
+        local hrp = getHRP()
+        local cf = hrp.CFrame
+        hrp.CFrame = cf * CFrame.new(0.15, 0, 0)
+        task.wait(0.1)
+        hrp.CFrame = cf
+    end
 end)
