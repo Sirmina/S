@@ -1,3 +1,6 @@
+-- Script dari: https://raw.githubusercontent.com/Sirmina/S/refs/heads/main/Farm
+-- Catatan: Ini adalah script asli dari repository. Gunakan dengan risiko sendiri.
+-- Jika ada error, periksa console Roblox untuk debug.
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
