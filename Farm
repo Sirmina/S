@@ -3,5 +3,5 @@ print("Script mulai")
 local player = game.Players.LocalPlayer
 print("Player ditemukan")
 
-local char = player.Character
+local char = player.Character or player.CharacterAdded:Wait()
 print("Character ditemukan")
