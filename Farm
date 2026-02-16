@@ -1,7 +1,80 @@
-print("Script mulai")
 
-local player = game.Players.LocalPlayer
-print("Player ditemukan")
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local char = player.Character or player.CharacterAdded:Wait()
-print("Character ditemukan")
+local Window = Rayfield:CreateWindow({
+    Name = "Demon Soul Simulator Auto Farm",
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "by Sirmina",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "DemonSoulSim",
+        FileName = "Config"
+    },
+    Discord = {
+        Enabled = false,
+        Invite = "",
+        RememberJoins = true
+    },
+    KeySystem = false
+})
+
+local Tab = Window:CreateTab("Auto Farm", 4483362458)
+
+local AutoFarmToggle = Tab:CreateToggle({
+    Name = "Enable Auto Farm",
+    CurrentValue = false,
+    Flag = "AutoFarm",
+    Callback = function(Value)
+        _G.AutoFarm = Value
+        if Value then
+            StartAutoFarm()
+        else
+            StopAutoFarm()
+        end
+    end,
+})
+
+local FarmSpeedSlider = Tab:CreateSlider({
+    Name = "Farm Speed (seconds)",
+    Range = {0.1, 5},
+    Increment = 0.1,
+    Suffix = "s",
+    CurrentValue = 1,
+    Flag = "FarmSpeed",
+    Callback = function(Value)
+        _G.FarmSpeed = Value
+    end,
+})
+
+local function StartAutoFarm()
+    while _G.AutoFarm do
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        
+        local mobs = workspace:FindFirstChild("Mobs")
+        if mobs then
+            for _, mob in pairs(mobs:GetChildren()) do
+                if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") then
+                    humanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+                    local args = {
+                        [1] = "Attack"
+                    }
+                    game:GetService("ReplicatedStorage").Remotes.Combat:FireServer(unpack(args))
+                    wait(_G.FarmSpeed or 1)
+                    break
+                end
+            end
+        end
+        wait(0.1)
+    end
+end
+
+local function StopAutoFarm()
+    -- Hentikan loop
+end
+
+_G.AutoFarm = false
+_G.FarmSpeed = 1
+
+Rayfield:LoadConfiguration()
